@@ -22,6 +22,7 @@ namespace FYPClient.Handlers
         {
             CallApi callApi = new CallApi(ConfigurationManager.AppSettings["FileTagGeneratorApi"] + fileObject.fileName);
             string jsonResponse = callApi.getJson() ;
+            if(jsonResponse == null || jsonResponse == "") return null;
             dynamic data = JObject.Parse(jsonResponse);
             string fileTag = data.fileTag;
             Debug.WriteLine("File Tag is " + fileTag );

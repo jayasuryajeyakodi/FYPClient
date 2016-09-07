@@ -32,6 +32,8 @@ namespace FYPClient.Utility
             }
             catch (WebException ex)
             {
+                Debug.WriteLine("File does not exist");
+                
                 WebResponse errorResponse = ex.Response;
                 using (Stream responseStream = errorResponse.GetResponseStream())
                 {
@@ -39,6 +41,7 @@ namespace FYPClient.Utility
                     String errorText = reader.ReadToEnd();
                     // log errorText
                 }
+                return null;
                 throw;
             }
         }

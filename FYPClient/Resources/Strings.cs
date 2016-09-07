@@ -16,6 +16,6 @@ namespace FYPClient.Resources
             2.Upload FIle
             3.Download File";
 
-        public static string welcomeMessage = @"*****************HYBRID DEDUPLICATION********************";
+        public static string welcomeMessage = "\n\n\n" + @"*****************HYBRID DEDUPLICATION********************";
     }
 }

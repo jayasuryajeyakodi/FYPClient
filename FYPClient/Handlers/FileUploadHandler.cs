@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,7 +19,7 @@ namespace FYPClient.Handlers
             fileObject = _fileObject;
         }
 
-        public FileObject UploadFile()
+        public string UploadFile()
         {
             string accessKey = ConfigurationManager.AppSettings["AwsAccessKey"];
             string secretAccessKey = ConfigurationManager.AppSettings["AwsSecretKey"];
@@ -28,6 +29,11 @@ namespace FYPClient.Handlers
             Console.WriteLine("Enter file path to upload");
             string localPath = Console.ReadLine();
             string filePath = localPath; // "C:\\Users\\Jaya\\Documents\\" + ;
+            if (File.Exists(filePath) == false)
+            {
+                Console.WriteLine("File does not exist");
+                return null;
+            }
             Debug.WriteLine("Uploading file " + localPath);
             string newFileName = "CloudFile";// + DateTime.Now.Ticks.ToString(); //new filename in s3, optional
 
@@ -35,8 +41,10 @@ namespace FYPClient.Handlers
             newFileName = Console.ReadLine();
 
             /*********************************/
+            Console.WriteLine("Encrypting using AES-256 ......");
             AesCrypto aes = new AesCrypto();
             filePath = aes.Encrypt(localPath);
+            Console.WriteLine("AES-256 Encryption done successfully....");
             /*********************************/
 
             Stopwatch stopWatch = new Stopwatch();
@@ -61,7 +69,7 @@ namespace FYPClient.Handlers
             Console.WriteLine("UploadTime " + elapsedTime);
             Debug.WriteLine("UploadTime " + elapsedTime);
             fileObject.globalPath = ConfigurationManager.AppSettings["AwsS3"] + newFileName;
-            return fileObject;
+            return fileObject.globalPath;
         }
     }
 }
